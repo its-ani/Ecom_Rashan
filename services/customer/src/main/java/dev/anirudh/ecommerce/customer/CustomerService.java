@@ -2,7 +2,6 @@ package dev.anirudh.ecommerce.customer;
 
 import dev.anirudh.ecommerce.exception.CustomerNotFoundException;
 import io.micrometer.common.util.StringUtils;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
