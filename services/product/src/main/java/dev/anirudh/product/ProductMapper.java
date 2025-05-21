@@ -1,0 +1,30 @@
+package dev.anirudh.product;
+
+import dev.anirudh.category.Category;
+import jakarta.validation.Valid;
+import org.hibernate.validator.constraintvalidators.RegexpURLValidator;
+import org.springframework.stereotype.Service;
+
+@Service
+public class ProductMapper {
+    private final RegexpURLValidator regexpURLValidator;
+
+    public ProductMapper(RegexpURLValidator regexpURLValidator) {
+        this.regexpURLValidator = regexpURLValidator;
+    }
+
+    public Product toProduct(@Valid ProductRequest request) {
+        return Product.builder()
+                .id(request.id())
+                .name(request.name())
+                .description(request.description())
+                .price(request.price())
+                .availableQuantity(request.availableQuantity())
+                .category(Category.builder().id(request.categoryId()).build())
+                .build();
+    }
+
+    public ProductResponse toProductResponse(Product product) {
+        return null;
+    }
+}
