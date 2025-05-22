@@ -1,5 +1,6 @@
 package dev.anirudh.product;
 
+import dev.anirudh.exception.ProductPurchaseException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,12 @@ public class ProductService {
     }
 
     public List<ProductPurchaseResponse> purchaseProducts(List<ProductPurchaseRequest> request) {
+        var productsId = request.stream().map(ProductPurchaseRequest::productId).toList();
+        var storedProducts = repository.findAllByIdInOrderById(productsId);
+
+        if(productsId.size() != storedProducts.size()) {
+            throw new ProductPurchaseException("One or more product do not exists.");
+        }
         return null;
     }
 
@@ -30,6 +37,9 @@ public class ProductService {
     }
 
     public List<ProductResponse> findAll() {
-        return null;
+        return repository.findAll()
+                .stream()
+                .map(mapper::toProductResponse)
+                .toList();
     }
 }
