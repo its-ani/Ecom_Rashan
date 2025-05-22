@@ -2,6 +2,7 @@ package dev.anirudh.product;
 
 import dev.anirudh.category.Category;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraintvalidators.RegexpURLValidator;
 import org.springframework.stereotype.Service;
 
@@ -35,5 +36,15 @@ public class ProductMapper {
                 product.getCategory().getName(),
                 product.getCategory().getDescription()
                 );
+    }
+
+    public ProductPurchaseResponse toproductPurchaseResponse(Product product, double quantity) {
+        return new ProductPurchaseResponse(
+                product.getId(),
+                product.getName(),
+                product.getDescription(),
+                product.getPrice(),
+                quantity
+        );
     }
 }
