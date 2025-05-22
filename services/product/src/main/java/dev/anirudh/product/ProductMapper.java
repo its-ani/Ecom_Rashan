@@ -2,7 +2,6 @@ package dev.anirudh.product;
 
 import dev.anirudh.category.Category;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraintvalidators.RegexpURLValidator;
 import org.springframework.stereotype.Service;
 
