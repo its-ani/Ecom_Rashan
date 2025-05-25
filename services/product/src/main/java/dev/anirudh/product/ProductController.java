@@ -1,7 +1,7 @@
 package dev.anirudh.product;
 
-import com.netflix.discovery.converters.Auto;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
