@@ -7,6 +7,5 @@ eureka:
     serviceUrl:
       defaultZone: http://${eureka.instance.hostname}/${server.port}/eureka/
 
-
 server:
   port: 8761

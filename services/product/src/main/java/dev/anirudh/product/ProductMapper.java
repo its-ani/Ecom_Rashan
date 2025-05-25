@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ProductMapper {
-    private final RegexpURLValidator regexpURLValidator;
-
-    public ProductMapper(RegexpURLValidator regexpURLValidator) {
-        this.regexpURLValidator = regexpURLValidator;
-    }
+//    private final RegexpURLValidator regexpURLValidator;
+//
+//    public ProductMapper(RegexpURLValidator regexpURLValidator) {
+//        this.regexpURLValidator = regexpURLValidator;
+//    }
 
     public Product toProduct(@Valid ProductRequest request) {
         return Product.builder()
