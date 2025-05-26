@@ -19,7 +19,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<String> handle(BusinessException exp){
-        return ResponseEntity.status(BAD_REQUEST).body(exp.get Msg());
+        return ResponseEntity.status(BAD_REQUEST).body(exp.getMsg());
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
