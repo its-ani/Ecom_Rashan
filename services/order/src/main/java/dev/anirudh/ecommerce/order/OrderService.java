@@ -4,9 +4,10 @@ import dev.anirudh.ecommerce.customer.CustomerClient;
 import dev.anirudh.ecommerce.exception.BusinessException;
 import dev.anirudh.ecommerce.kafka.OrderConfirmation;
 import dev.anirudh.ecommerce.kafka.OrderProducer;
-import dev.anirudh.ecommerce.orderline.OrderLine;
 import dev.anirudh.ecommerce.orderline.OrderLineRequest;
 import dev.anirudh.ecommerce.orderline.OrderLineService;
+import dev.anirudh.ecommerce.payment.PaymentClient;
+import dev.anirudh.ecommerce.payment.PaymentRequest;
 import dev.anirudh.ecommerce.product.ProductClient;
 import dev.anirudh.ecommerce.product.PurchaseRequest;
 import jakarta.persistence.EntityNotFoundException;
@@ -27,6 +28,7 @@ public class OrderService {
     private final OrderMapper mapper;
     private final OrderLineService orderLineService;
     private final OrderProducer orderProducer;
+    private final PaymentClient paymentClient;
 
     public Integer createOrder(@Valid OrderRequest request) {
         var customer = this.customerClient.findCustomerById(request.customerId())
@@ -45,6 +47,14 @@ public class OrderService {
                     )
             );
         }
+        var paymentRequest = new PaymentRequest(
+                request.amount(),
+                request.paymentMethod(),
+                order.getId(),
+                order.getReference(),
+                customer
+        );
+        paymentClient.requestOrderPayment(paymentRequest);
 
         orderProducer.sendOrderConfirmation(
                 new OrderConfirmation(
