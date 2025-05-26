@@ -1,7 +1,6 @@
 package dev.anirudh.ecommerce.handler;
 
 import dev.anirudh.ecommerce.exception.BusinessException;
-import dev.anirudh.exception.ProductPurchaseException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
