@@ -6,7 +6,7 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   kafka:
@@ -17,6 +17,9 @@ spring:
       properties:
         spring.json.type.mapping: paymentConfirmation:dev.anirudh.ecommerce.notification.PaymentNotificationRequest
 
-
 server:
   port: 8060
+
+application:
+  config:
+    product-url: http://localhost:8222/api/v1/products
