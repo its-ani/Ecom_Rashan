@@ -54,6 +54,7 @@ public class ProductService {
                 .orElseThrow(() -> new EntityNotFoundException("Product not found with ID::" + productId));
     }
 
+//    Add Pagination
     public List<ProductResponse> findAll() {
         return repository.findAll()
                 .stream()
