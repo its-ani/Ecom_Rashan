@@ -23,8 +23,16 @@
         <module name="notification" />
         <module name="product" />
         <module name="payment" />
-        <module name="order" />
         <module name="customer" />
+      </profile>
+      <profile name="Annotation profile for order" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath>
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/unknown/lombok-unknown.jar" />
+        </processorPath>
+        <module name="order" />
       </profile>
     </annotationProcessing>
   </component>

@@ -10,6 +10,7 @@ import dev.anirudh.ecommerce.payment.PaymentClient;
 import dev.anirudh.ecommerce.payment.PaymentRequest;
 import dev.anirudh.ecommerce.product.ProductClient;
 import dev.anirudh.ecommerce.product.PurchaseRequest;
+import dev.anirudh.ecommerce.redis.RedisService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class OrderService {
     private final OrderLineService orderLineService;
     private final OrderProducer orderProducer;
     private final PaymentClient paymentClient;
+    private final RedisService redisService;
 
     public Integer createOrder(@Valid OrderRequest request) {
         var customer = this.customerClient.findCustomerById(request.customerId())
@@ -69,7 +71,6 @@ public class OrderService {
         return order.getId();
     }
 
-//    Implement Pagination and sorting.
     public List<OrderResponse> findAll() {
         return repository.findAll()
                 .stream()
@@ -78,8 +79,19 @@ public class OrderService {
     }
 
     public OrderResponse findById(Integer orderId) {
-        return repository.findById(orderId)
-                         .map(mapper::fromOrder)
-                         .orElseThrow(() -> new EntityNotFoundException(String.format("No order found with provided Id: %d", orderId)));
+        String redisKey = "order:id:" + orderId;
+
+        OrderResponse cacheOrderResponse = redisService.get(redisKey, OrderResponse.class);
+        if (cacheOrderResponse != null) {
+            return cacheOrderResponse;
+        }
+
+        OrderResponse dbOrderResponse = repository.findById(orderId)
+                                                .map(mapper::fromOrder)
+                                                .orElseThrow(() -> new EntityNotFoundException(String.format("No order found with provided Id: %d", orderId)));
+
+        redisService.set(redisKey, dbOrderResponse, 300l);
+
+        return dbOrderResponse;
     }
 }
