@@ -16,6 +16,8 @@ import static org.apache.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+
+//Circuit Breaker
 @Service
 @RequiredArgsConstructor
 public class ProductClient {

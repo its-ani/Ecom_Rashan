@@ -49,6 +49,7 @@ public class ProductService {
     }
 
     public ProductResponse findById(Integer productId) {
+//        Redis
         return repository.findById(productId)
                 .map(mapper::toProductResponse)
                 .orElseThrow(() -> new EntityNotFoundException("Product not found with ID::" + productId));
