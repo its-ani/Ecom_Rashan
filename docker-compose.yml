@@ -95,6 +95,30 @@ services:
     networks:
       - microservices-net
 
+  redis:
+    container_name: ms_redis
+    image: redis:alpine
+    ports:
+      - 6379:6379
+    networks:
+      - microservices-net
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+
+  redis-commander:
+    container_name: ms_redis_commander
+    image: rediscommander/redis-commander:latest
+    environment:
+      - REDIS_HOSTS=local:ms_redis:6379
+    ports:
+      - 8082:8081
+    networks:
+      - microservices-net
+    depends_on:
+      - redis
+    restart: unless-stopped
+
 networks:
   microservices-net:
     driver: bridge
@@ -103,7 +127,4 @@ volumes:
   postgres:
   pgadmin:
   mongo:
-
-
-
-#Implement redis for cache
+  redis_data:
