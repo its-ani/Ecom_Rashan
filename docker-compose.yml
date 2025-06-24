@@ -103,3 +103,7 @@ volumes:
   postgres:
   pgadmin:
   mongo:
+
+
+
+#Implement redis for cache
