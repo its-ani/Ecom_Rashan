@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Optional;
 
-//Circuit Breaker
+// Implement Circuit Breaker
 @FeignClient(
         name = "customer-service",
         url = "${application.config.customer-url}"
