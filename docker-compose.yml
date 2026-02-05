@@ -1,7 +1,8 @@
 services:
   postgres:
     container_name: ms_pg_sql
-    image: postgres
+#    image: postgres
+    image: postgres:17
     environment:
       POSTGRES_USER: anirudh
       POSTGRES_PASSWORD: anirudh
@@ -64,7 +65,8 @@ services:
       - microservices-net
 
   kafka:
-    image: confluentinc/cp-kafka:latest
+#    image: confluentinc/cp-kafka:latest
+    image: confluentinc/cp-kafka:7.4.0
     container_name: ms_kafka
     ports:
       - 9092:9092
@@ -109,6 +111,7 @@ services:
   redis-commander:
     container_name: ms_redis_commander
     image: rediscommander/redis-commander:latest
+    platform: linux/amd64
     environment:
       - REDIS_HOSTS=local:ms_redis:6379
     ports:
@@ -119,6 +122,33 @@ services:
       - redis
     restart: unless-stopped
 
+  elasticsearch:
+    container_name: ms_elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - 9200:9200
+    networks:
+      - microservices-net
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+
+  kibana:
+    container_name: ms_kibana
+    image: docker.elastic.co/kibana/kibana:8.13.4
+    ports:
+      - 5601:5601
+    environment:
+      - ELASTICSEARCH_HOSTS=http://ms_elasticsearch:9200
+    depends_on:
+      - elasticsearch
+    networks:
+      - microservices-net
+
+
 networks:
   microservices-net:
     driver: bridge
@@ -128,3 +158,4 @@ volumes:
   pgadmin:
   mongo:
   redis_data:
+  es_data:
