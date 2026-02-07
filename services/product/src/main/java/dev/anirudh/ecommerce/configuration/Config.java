@@ -1,6 +1,7 @@
 package dev.anirudh.ecommerce.configuration;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.client.ClientConfiguration;
@@ -15,6 +16,7 @@ public class Config extends ElasticsearchConfiguration {
     @Value("${spring.elasticsearch.uris}")
     public String elasticsearchUrl;
 
+    @Bean
     @Override
     public ClientConfiguration clientConfiguration() {
         String hostAndPort = elasticsearchUrl.replace("http://", "").replace("https://", "");

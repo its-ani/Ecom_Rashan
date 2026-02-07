@@ -1,5 +1,6 @@
 package dev.anirudh.ecommerce.product;
 
+import dev.anirudh.ecommerce.service.ElasticProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService service;
+    private final ElasticProductService elasticProductService;
 
     @PostMapping
     public ResponseEntity<Integer> createProduct(@RequestBody @Valid ProductRequest request) {
