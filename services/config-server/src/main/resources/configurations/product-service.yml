@@ -16,6 +16,8 @@ spring:
     baseline-version: 0
     user: ${spring.datasource.username}
     password: ${spring.datasource.password}
+  elasticsearch:
+    uris: http://localhost:9200
 server:
   port: 8050
  
