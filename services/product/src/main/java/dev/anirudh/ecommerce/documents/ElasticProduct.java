@@ -27,7 +27,7 @@ public class ElasticProduct {
     private Double availableQuantity;
     @Field(type = FieldType.Double)
     private BigDecimal price;
-    @Field(type = FieldType.Object)
+    @Field(type = FieldType.Nested) // object don't support aggregation nested does also, nested good for exact match.
     private ElasticCategory category;
 
     @Builder
