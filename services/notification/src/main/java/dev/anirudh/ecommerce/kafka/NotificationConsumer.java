@@ -4,7 +4,9 @@ import dev.anirudh.ecommerce.email.EmailService;
 import dev.anirudh.ecommerce.kafka.order.OrderConfirmation;
 import dev.anirudh.ecommerce.kafka.payment.PaymentConfirmation;
 import dev.anirudh.ecommerce.notification.Notification;
+import dev.anirudh.ecommerce.notification.NotificationDocument;
 import dev.anirudh.ecommerce.notification.NotificationRepository;
+import dev.anirudh.ecommerce.notification.NotificationSearchRepository;
 import dev.anirudh.ecommerce.notification.NotificationType;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +25,7 @@ import static java.lang.String.format;
 @Slf4j
 public class NotificationConsumer {
     private final NotificationRepository repository;
-
+    private final NotificationSearchRepository searchRepository;
     private final EmailService emailService;
 
     @KafkaListener(topics = "payment-topic")
@@ -34,7 +36,20 @@ public class NotificationConsumer {
                 .notificationDate(LocalDateTime.now())
                 .paymentConfirmation(paymentConfirmation)
                 .build());
+
+        // Index into Elasticsearch
         var customerName = paymentConfirmation.customerFirstName() + " " + paymentConfirmation.customerLastName();
+        searchRepository.save(NotificationDocument.builder()
+                .type(PAYMENT_CONFIRMATION)
+                .notificationDate(LocalDateTime.now())
+                .customerName(customerName)
+                .customerEmail(paymentConfirmation.customerEmail())
+                .orderReference(paymentConfirmation.orderReference())
+                .paymentMethod(paymentConfirmation.paymentMethod())
+                .amount(paymentConfirmation.amount())
+                .paymentConfirmation(paymentConfirmation)
+                .build());
+
         emailService.sendPaymentSuccessEmail(
                 paymentConfirmation.customerEmail(),
                 customerName,
@@ -53,7 +68,19 @@ public class NotificationConsumer {
                 .orderConfirmation( orderConfirmation)
                 .build());
 
+        // Index into Elasticsearch
         var customerName = orderConfirmation.customer().firstName() + " " + orderConfirmation.customer().lastName();
+        searchRepository.save(NotificationDocument.builder()
+                .type(ORDER_CONFIRMATION)
+                .notificationDate(LocalDateTime.now())
+                .customerName(customerName)
+                .customerEmail(orderConfirmation.customer().email())
+                .orderReference(orderConfirmation.orderReference())
+                .paymentMethod(orderConfirmation.paymentMethod())
+                .amount(orderConfirmation.totalAmount())
+                .orderConfirmation(orderConfirmation)
+                .build());
+
         emailService.sendOrderConfirmationEmail(
                 orderConfirmation.customer().email(),
                 customerName,
